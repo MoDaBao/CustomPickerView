@@ -8,8 +8,8 @@
 
 #import "CustomPickerView.h"
 #import "UILabel+LabelHeightAndWidth.h"
-#define kScreenWidth [UIScreen mainScreen].bounds.size.width
-#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+//#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+//#define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
 @implementation CustomPickerView
 
@@ -46,14 +46,15 @@
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         [backgroundView setTag:6666];
         backgroundView.backgroundColor = [UIColor lightGrayColor];
-        backgroundView.alpha = 0.2;
+        backgroundView.alpha = 0.0;
         [self addSubview:backgroundView];
         // 给遮罩层添加手势
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
         [backgroundView addGestureRecognizer:tap];
         
         // 内容视图
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - contentHeight, kScreenWidth, contentHeight)];
+//        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - contentHeight, kScreenWidth, contentHeight)];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, contentHeight)];
         [contentView setTag:2333];
         [self addSubview:contentView];
         
@@ -76,7 +77,7 @@
         [titleView addSubview:self.confirmBtn];
         
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        self.titleLabel.font = [UIFont systemFontOfSize:14];
+        self.titleLabel.font = [UIFont systemFontOfSize:16];
         [titleView addSubview:self.titleLabel];
         
         
@@ -86,6 +87,15 @@
         self.pickerView.backgroundColor = [UIColor whiteColor];
         [contentView addSubview:self.pickerView];
         
+        
+        CGRect newFrame = contentView.frame;
+        newFrame.origin.y = newFrame.origin.y - contentHeight;
+        [UIView animateWithDuration:.4 animations:^{
+            backgroundView.alpha = 0.2;
+            contentView.frame = newFrame;
+        } completion:^(BOOL finished) {
+            
+        }];
         
         
     }
@@ -100,6 +110,7 @@
     } else {
         self.click(self.dataArray[0]);
     }
+    [self hide];
     
 }
 
